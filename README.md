@@ -181,11 +181,16 @@ gcloud alpha compute tpus tpu-vm ssh $NAME --zone=$ZONE --worker=0 --command "rm
 If you want to integrate other public or custom datasets, i.e. imagenet2012,
 please follow [the official guideline](https://www.tensorflow.org/datasets/catalog/overview).
 
+## Pre-trained models
+
+For the full list of pre-trained models check out the `load` function defined in
+the same module as the model code. And for example config on how to use these
+models, see `configs/transfer.py`.
+
 ## Run the transfer script on TPU VMs
 
 The following command line fine-tunes a pre-trained `vit-i21k-augreg-b/32` model
-on `cifar10` dataset. Please check `transfer.py` directly for more supported
-datasets and models.
+on `cifar10` dataset.
 
 ```
 gcloud alpha compute tpus tpu-vm ssh $NAME --zone=$ZONE --worker=all --command "TFDS_DATA_DIR=gs://$GS_BUCKET_NAME/tensorflow_datasets bash big_vision/run_tpu.sh big_vision.train --config big_vision/configs/transfer.py:model=vit-i21k-augreg-b/32,dataset=cifar10,crop=resmall_crop --workdir gs://$GS_BUCKET_NAME/big_vision/workdir/`date '+%m-%d_%H%M'` --config.lr=0.03"
@@ -194,7 +199,7 @@ gcloud alpha compute tpus tpu-vm ssh $NAME --zone=$ZONE --worker=all --command "
 ## Run the train script on TPU VMs
 
 To train your own big_vision models on a large dataset,
-e.g. `imagenet2012` ([prepare the TFDS dataset]((https://www.tensorflow.org/datasets/catalog/imagenet2012)),
+e.g. `imagenet2012` ([prepare the TFDS dataset](https://www.tensorflow.org/datasets/catalog/imagenet2012)),
 run the following command line.
 
 ```
@@ -233,7 +238,6 @@ the following BibTEX to cite it:
   year = {2022},
   publisher = {GitHub},
   journal = {GitHub repository},
-  doi = {TBD},
   howpublished = {\url{https://github.com/google-research/big_vision}}
 }
 ```
