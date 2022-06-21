@@ -17,13 +17,11 @@
 import ml_collections as mlc
 
 
-def get_fewshot_lsr(batch_size=None,
-                    target_resolution=224, resize_resolution=256,
+def get_fewshot_lsr(target_resolution=224, resize_resolution=256,
                     runlocal=False):
   """Returns a standard-ish fewshot eval configuration."""
   config = mlc.ConfigDict()
-  if batch_size:
-    config.batch_size = batch_size
+  config.type = 'fewshot_lsr'
   config.representation_layer = 'pre_logits'
   config.log_steps = 25_000
   config.datasets = {
@@ -32,6 +30,7 @@ def get_fewshot_lsr(batch_size=None,
       'cifar100': ('cifar100', 'train', 'test'),
       'dtd': ('dtd', 'train', 'test'),
       # The first 65000 ImageNet samples have at least 30 shots per any class.
+      # Commented out by default because needs manual download.
       # 'imagenet': ('imagenet2012', 'train[:65000]', 'validation'),
       'pets': ('oxford_iiit_pet', 'train', 'test'),
       'uc_merced': ('uc_merced', 'train[:1000]', 'train[1000:]'),
