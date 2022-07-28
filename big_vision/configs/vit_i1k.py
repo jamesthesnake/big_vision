@@ -29,7 +29,7 @@ Run training of a B/32 model with custom aug-strenght and 300ep:
 big_vision.train \
     --config big_vision/configs/vit_i1k.py:variant=B/32,aug=light1 \
     --workdir gs://[your_bucket]/big_vision/`date '+%m-%d_%H%M'` \
-    --config.num_epochs 300
+    --config.total_epochs 300
 """
 
 import big_vision.configs.common as bvcc
@@ -81,7 +81,7 @@ def get_config(arg=None):
   config.num_classes = 1000
   config.loss = 'softmax_xent'
   config.batch_size = 4096
-  config.num_epochs = 300
+  config.total_epochs = 300
 
   pp_common = (
       '|value_range(-1, 1)'
@@ -102,7 +102,7 @@ def get_config(arg=None):
   config.prefetch_to_device = 4
 
   config.log_training_steps = 50
-  config.checkpoint_steps = 1000
+  config.ckpt_steps = 1000
 
   # Model section
   config.model_name = 'vit'
@@ -156,9 +156,10 @@ def get_config(arg=None):
   if arg.runlocal:
     config.shuffle_buffer_size = 10
     config.batch_size = 8
-    config.minival.split = 'train[:16]'
-    config.val.split = 'validation[:16]'
-    config.real.split = 'validation[:16]'
-    config.v2.split = 'test[:16]'
+    config.evals.train.split = 'train[:16]'
+    config.evals.minival.split = 'train[:16]'
+    config.evals.val.split = 'validation[:16]'
+    config.evals.real.split = 'validation[:16]'
+    config.evals.v2.split = 'test[:16]'
 
   return config

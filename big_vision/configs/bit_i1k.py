@@ -40,7 +40,7 @@ def get_config(runlocal=False):
 
   config.seed = 0
   config.batch_size = 4096 if not runlocal else 32
-  config.num_epochs = 90
+  config.total_epochs = 90
 
   pp_common = '|onehot(1000, key="{lbl}", key_result="labels")'
   pp_common += '|value_range(-1, 1)|keep("image", "labels")'
@@ -48,7 +48,7 @@ def get_config(runlocal=False):
   pp_eval = 'decode|resize_small(256)|central_crop(224)' + pp_common
 
   config.log_training_steps = 50
-  config.checkpoint_steps = 1000
+  config.ckpt_steps = 1000
 
   # Model section
   config.model_name = 'bit'

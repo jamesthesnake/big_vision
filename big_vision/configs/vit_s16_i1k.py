@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # pylint: disable=line-too-long
-r"""Pre-training ViT-S/16 on ILSVRC-2012 following [arxiv link].
+r"""Pre-training ViT-S/16 on ILSVRC-2012 following https://arxiv.org/abs/2205.01580.
 
 This should take 6-7h to finish 90ep on a TPU-v3-8 and reach 76.5%,
 see the tech report for more details.
@@ -21,10 +21,10 @@ see the tech report for more details.
 Command to run:
 
 big_vision.train \
-    --config big_vision/configs/ilsvrc_vit_s16.py \
+    --config big_vision/configs/vit_s16_i1k.py \
     --workdir gs://[your_bucket]/big_vision/`date '+%m-%d_%H%M'`
 
-To run for 300ep, add `--config.num_epochs 300` to the command.
+To run for 300ep, add `--config.total_epochs 300` to the command.
 """
 
 import ml_collections as mlc
@@ -41,7 +41,7 @@ def get_config():
   config.num_classes = 1000
   config.loss = 'softmax_xent'
   config.batch_size = 1024
-  config.num_epochs = 90
+  config.total_epochs = 90
 
   pp_common = (
       '|value_range(-1, 1)'
@@ -55,7 +55,7 @@ def get_config():
   pp_eval = 'decode|resize_small(256)|central_crop(224)' + pp_common
 
   config.log_training_steps = 50
-  config.checkpoint_steps = 1000
+  config.ckpt_steps = 1000
 
   # Model section
   config.model_name = 'vit'
